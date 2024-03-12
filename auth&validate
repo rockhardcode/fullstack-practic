@@ -1,0 +1,26 @@
+//wrong way to authenticate and validate
+
+const express = require("express");
+const app = express();
+
+app.get("/health-checkup", (req, res) => {
+  const username = req.headers.username;
+  const password = req.headers.password;
+  const kidneyId = req.query.kidneyId;
+
+  if (!(username === "rakesh" && password === "rakesh@123")) {
+    res.status(400).json({ "msg": "Invalid username or password" });
+    return;
+  }
+  if (kidneyId < 1 && kidneyId > 2) {
+    res.status(400).json({ "msg": "Invalid kidneyId" });
+    return;
+  }
+  res.json({
+    msg: "Health checkup successful",
+  });
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
