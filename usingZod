@@ -1,0 +1,81 @@
+// validation using zod library
+
+const express = require("express");
+const zod = require("zod")
+const app = express();
+
+app.use(express.json())
+
+const schema = zod.array(zod.number())
+
+app.post("/health-checkup", (req, res) => {
+const kidneys = req.body.kidneys
+  const response = schema.safeParse(kidneys)
+  res.send({
+    response
+  })
+});
+
+// globle catch - use for all routes incase of wrong inputs
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
+//body: {kidneys: [1,2]}
+//response: {
+    "response": {
+        "success": true,
+        "data": [
+            1,
+            2
+        ]
+    }
+}
+
+//body: {kidneys: ["dsfa", 2]}
+// response : {
+    "response": {
+        "success": false,
+        "error": {
+            "issues": [
+                {
+                    "code": "invalid_type",
+                    "expected": "number",
+                    "received": "string",
+                    "path": [
+                        0
+                    ],
+                    "message": "Expected number, received string"
+                }
+            ],
+            "name": "ZodError"
+        }
+    }
+}
+
+//another example using zod with multiple inputs
+
+const express = require("express");
+const zod = require("zod")
+const app = express();
+
+app.use(express.json())
+
+const schema = zod.object({
+  email: zod.string(),
+  password: zod.string(),
+  country: zod.literal("IN").or(zod.literal("US")),
+  kidneys: zod.array(zod.number())
+})
+
+app.post("/health-checkup", (req, res) => {
+const kidneys = req.body
+  const response = schema.safeParse(kidneys)
+  res.send({
+    response
+  })
+});
+
+// globle catch - use for all routes incase of wrong inputs
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
