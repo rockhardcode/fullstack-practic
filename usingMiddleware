@@ -1,0 +1,38 @@
+const express = require("express");
+const { nextTick } = require("process");
+const app = express();
+
+app.use(express.json())
+
+function handleAuth(req, res, next) {
+  const username = req.body.username
+  const password = req.body.password
+  if(!(username === "admin" && password === "admin")){
+    res.json({msg: "wrong username or password"})
+    return
+  } else {
+    next()
+  }
+}
+
+function handleValidation(req, res, next) {
+  const kidneyId = req.body.kidneyId
+  if(!(kidneyId < 1 && kidneyId > 2)) {
+    res.json({
+      msg: "entered wrong kidneys"
+    })
+  } else {
+    next()
+  }
+}
+
+app.get("/health-checkup", handleAuth, handleValidation, (req, res) => {
+res.json({msg: "successfully passed through all validations"})
+});
+app.use((err, req, res, next) => {
+  res.json({msg: "you have entered wrong inputs please try again later"})
+})
+// globle catch - use for all routes incase of wrong inputs
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
