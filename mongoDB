@@ -1,0 +1,37 @@
+// connecting server with mongoDB using mongodb compass.
+// example of how signup works which is in a basic code format.
+const express = require("express")
+const mongoose = require("mongoose");
+const app = express()
+app.use(express.json())
+mongoose.connect(
+"mongodb+srv://divaterakesh3:<password>@cluster0.zujk3fk.mongodb.net/newUsers?retryWrites=true&w=majority"
+);
+const User = mongoose.model('Users', {name: String, email: String, password: String})
+
+app.post('/signup', async (req, res) =>{
+  const username = req.body.username
+  const passoword = req.body.password
+  const name = req.body.name
+  const userExist = await User.findOne({email: username})
+  if(userExist) {
+    res.send("User with this email Id already exist")
+  }
+  const user = new User({
+    name: name,
+    email: username,
+    password: passoword
+  })
+  user.save()
+  .then(() => {
+    console.log('User saved successfully!');
+    mongoose.connection.close(); // Close the connection after saving
+  })
+  .catch(error => {
+    console.error('Error saving user:', error);
+    mongoose.connection.close(); // Close the connection on error
+  });
+})
+app.listen(3000, () => {
+  console.log('server has started')
+})
