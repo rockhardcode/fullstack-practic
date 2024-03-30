@@ -1,0 +1,26 @@
+// Context api
+import { createContext, useContext } from "react";
+
+export const CountContext = createContext(0)
+
+
+
+const App = () => {
+    const [count, setCount] = useState()
+    return(
+        <div>
+        <CountContext.Provider value={count}>
+            <Count/>
+        </CountContext.Provider>
+        </div>
+    )
+}
+
+const Count = () => {
+    const count = useContext(CountContext)
+    return (
+        <div>
+            {count}
+        </div>
+    )
+}
