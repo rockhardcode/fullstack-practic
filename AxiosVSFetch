@@ -1,0 +1,53 @@
+const axios = require('axios')
+
+// GET request
+async function main() {
+    const response = await axios.get('https://sum-server.100xdevs.com/todos')
+    // const json = await response.json() // axios automatically converts the response into json
+    console.log(response.data)
+}
+
+// POST requies
+async function main() {
+    const res = await axios.post('URL', {
+        username: "rakesh@gmail.com",
+        password: "123456498"
+    }, 
+    {
+        headers: {
+            authentication: "Barer jsldjfkjdslj656dsfsdf654"
+        }
+    })
+    console.log(res.data)
+}
+
+// POST requies another way
+async function main() {
+    const res = await axios({
+        url: "url",
+        method: "POST",
+        headers: {
+            Authorization: "Barer slkdjfdsf5sd6sd333"
+        },
+        body: {
+            username: 'rakesh@gmail.com',
+            password: 'rakesh1213'
+        }
+    },
+    )
+}
+
+// function main() {
+//     fetch('https://sum-server.100xdevs.com/todos')
+//     .then(async res => {
+//         const json = await res.json()
+//         console.log(json)
+//     })
+// }
+async function main() {
+    const response = await fetch('https://sum-server.100xdevs.com/todos')
+    const json = await response.json()
+    console.log(json)
+}
+
+main()
